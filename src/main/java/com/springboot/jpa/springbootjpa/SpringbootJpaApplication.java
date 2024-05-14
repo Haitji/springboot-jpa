@@ -1,6 +1,7 @@
 package com.springboot.jpa.springbootjpa;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -21,11 +22,35 @@ public class SpringbootJpaApplication implements CommandLineRunner{
 
 	@Override
 	public void run(String... args) throws Exception {
-		List<Person> persons = (List<Person>) repository.findAll();
+		findOne();
+	}
 
-		persons.stream().forEach(p -> {
-			System.out.println(p.getName());
+	public void list(){
+		//List<Person> persons = (List<Person>) repository.findAll();
+		//List<Person> persons = (List<Person>) repository.buscarPorProgrammingLanguages("Java");
+		//List<Person> persons = (List<Person>) repository.findByProgrammingLanguagesAndName("Java","Andres");
+		List<Object[]> personsValues = repository.obtenerNombrePorLenguaje("Java");
+		// persons.stream().forEach(person -> {
+		// 	System.out.println(person);
+		// });
+
+		personsValues.stream().forEach(person -> {
+			System.out.println(person[0]+" es experto en " + person[1]);
 		});
+	}
+
+	public void findOne(){
+		//Person person = repository.findById(1L).orElseThrow();//tambien podemos usar el .get() en lugar del .orElseThrow()
+        Person person = null;
+		Optional<Person> optioanlPerson = repository.findById(1L);
+		if(optioanlPerson.isPresent()){
+			person = optioanlPerson.get();
+		}
+		System.out.println(person);
+
+
+		//Esta es otra manera de obnetencion de un elemento
+		repository.findById(1L).ifPresent(perso -> { System.out.println(perso);});
 	}
 
 }

@@ -10,7 +10,6 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "persons")
 public class Person {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -54,6 +53,10 @@ public class Person {
     public void setProgrammingLanguages(String programmingLanguages) {
         this.programmingLanguages = programmingLanguages;
     }
-
+    @Override
+    public String toString() {
+        return "[id=" + id + ", name=" + name + ", lastname=" + lastname + ", programmingLanguage="
+                + programmingLanguages + "]";
+    }
     
 }
