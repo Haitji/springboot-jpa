@@ -26,9 +26,10 @@ public class SpringbootJpaApplication implements CommandLineRunner{
 
 	@Override
 	public void run(String... args) throws Exception {
-		create();
-		delete();
-		list();
+		// create();
+		// delete();
+		// list();
+		findOneById();
 	}
 
 	public void list(){
@@ -62,6 +63,12 @@ public class SpringbootJpaApplication implements CommandLineRunner{
 		repository.findByNameContaining("se").ifPresent(System.out::println);// es igual que el like pero este viene por defecto del jpa repository
 	}
 
+	@Transactional(readOnly = true)
+	public void findOneById(){
+        Object[] reg = (Object[]) repository.buscarPersonaPorid(1L);
+		System.out.println("Id: "+reg[0]+" Nombre: "+reg[1]+" Apellido: "+reg[2]+" Lenguaje programacion: "+reg[3]);
+	}
+
 	@Transactional
 	public void create(){
 		Person person = new Person(null, "Haitian", "Ji", "Springboot");
@@ -89,6 +96,7 @@ public class SpringbootJpaApplication implements CommandLineRunner{
 			Person per = repository.save(p);
 			System.out.println(per);
 		});
+		scanner.close();
 	}
 
 	@Transactional
@@ -96,6 +104,7 @@ public class SpringbootJpaApplication implements CommandLineRunner{
 		Scanner scanner = new Scanner(System.in);
 		System.out.println("Id: ");
 		Long id = scanner.nextLong();
+		scanner.close();
 		Optional<Person> optionalPerson = repository.findById(id);
 		// if(optionalPerson.isPresent()){
 		// 	repository.delete(optionalPerson.get());//Podemos eliminar por Person o por id que seria deleteById

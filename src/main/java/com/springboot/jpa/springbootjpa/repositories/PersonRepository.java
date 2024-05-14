@@ -34,4 +34,7 @@ public interface PersonRepository extends CrudRepository<Person,Long>{
     Optional<Person> findByNameContaining(String string);
 
     Optional<Person> findByNameAndLastname(String name, String lastname);
+
+    @Query("select p.id,p.name, p.lastname, p.programmingLanguages from Person p where p.id = ?1")
+    Object buscarPersonaPorid(Long id);
 }
