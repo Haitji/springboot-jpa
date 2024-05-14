@@ -2,14 +2,18 @@ package com.springboot.jpa.springbootjpa;
 
 import java.util.List;
 import java.util.Optional;
-
+import java.util.Scanner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.transaction.annotation.Transactional;
+
 
 import com.springboot.jpa.springbootjpa.model.Person;
 import com.springboot.jpa.springbootjpa.repositories.PersonRepository;
+
+
 
 @SpringBootApplication
 public class SpringbootJpaApplication implements CommandLineRunner{
@@ -22,23 +26,26 @@ public class SpringbootJpaApplication implements CommandLineRunner{
 
 	@Override
 	public void run(String... args) throws Exception {
-		findOne();
+		create();
+		delete();
+		list();
 	}
 
 	public void list(){
-		//List<Person> persons = (List<Person>) repository.findAll();
+		List<Person> persons = (List<Person>) repository.findAll();
 		//List<Person> persons = (List<Person>) repository.buscarPorProgrammingLanguages("Java");
 		//List<Person> persons = (List<Person>) repository.findByProgrammingLanguagesAndName("Java","Andres");
-		List<Object[]> personsValues = repository.obtenerNombrePorLenguaje("Java");
-		// persons.stream().forEach(person -> {
-		// 	System.out.println(person);
-		// });
-
-		personsValues.stream().forEach(person -> {
-			System.out.println(person[0]+" es experto en " + person[1]);
+		//List<Object[]> personsValues = repository.obtenerNombrePorLenguaje("Java");
+		persons.stream().forEach(person -> {
+			System.out.println(person);
 		});
+
+		// personsValues.stream().forEach(person -> {
+		// 	System.out.println(person[0]+" es experto en " + person[1]);
+		// });
 	}
 
+	@Transactional(readOnly = true)
 	public void findOne(){
 		//Person person = repository.findById(1L).orElseThrow();//tambien podemos usar el .get() en lugar del .orElseThrow()
         Person person = null;
@@ -51,6 +58,51 @@ public class SpringbootJpaApplication implements CommandLineRunner{
 
 		//Esta es otra manera de obnetencion de un elemento
 		repository.findById(1L).ifPresent(perso -> { System.out.println(perso);});
+		repository.findOneLikeName("se").ifPresent(System.out::println);
+		repository.findByNameContaining("se").ifPresent(System.out::println);// es igual que el like pero este viene por defecto del jpa repository
+	}
+
+	@Transactional
+	public void create(){
+		Person person = new Person(null, "Haitian", "Ji", "Springboot");
+		if(repository.findByNameAndLastname(person.getName(),person.getLastname()).isEmpty()){
+			repository.save(person);
+		}
+		
+		List<Person> per = (List<Person>) repository.findAll();
+		per.stream().forEach(p -> {
+			System.out.println(p);
+		});
+	}
+
+	@Transactional
+	public void uptade(){
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Id: ");
+		Long id = scanner.nextLong();
+		Optional<Person> optionalPerson = repository.findById(id);
+		optionalPerson.ifPresent(p -> {
+			System.out.println(p);
+			System.out.println("Ingrese el nuevo lenguaje de programacion: ");
+			String lenguaje = scanner.next();//usamos next porque nextLine no espera y se ejecuta directamente
+			p.setProgrammingLanguages(lenguaje);
+			Person per = repository.save(p);
+			System.out.println(per);
+		});
+	}
+
+	@Transactional
+	public void delete(){
+		Scanner scanner = new Scanner(System.in);
+		System.out.println("Id: ");
+		Long id = scanner.nextLong();
+		Optional<Person> optionalPerson = repository.findById(id);
+		// if(optionalPerson.isPresent()){
+		// 	repository.delete(optionalPerson.get());//Podemos eliminar por Person o por id que seria deleteById
+		// }else{
+		// 	System.out.println("El id introducido no existe");
+		// }
+		optionalPerson.ifPresentOrElse(/*p -> repository.delete(p)*/repository::delete, () -> System.out.println("El id introducido no existe"));
 	}
 
 }
