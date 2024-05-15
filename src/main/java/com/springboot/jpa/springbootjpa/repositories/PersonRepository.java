@@ -66,6 +66,8 @@ public interface PersonRepository extends CrudRepository<Person,Long>{
     @Query("select upper(p.name)|| ' '||lower(p.lastname) from Person p")
     List<String> findFullNameUpperLowerCase();
 
-    @Query("select p from Person p where p.id between ?1 and ?2")
+    @Query("select p from Person p where p.id between ?1 and ?2 order by p.name desc, p.id desc")//ejemplo de order by
     List<Person> findBetweenId(Long num1,Long num2);
+
+    List<Person> findByIdBetweenOrderByIdDesc(Long n1,Long n2);//otra manera de hacer consulta
 }
