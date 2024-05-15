@@ -29,6 +29,7 @@ public class SpringbootJpaApplication implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 		//create();
+		uptade();
 		// delete();
 		//list();
 		//findOneById();
@@ -39,7 +40,7 @@ public class SpringbootJpaApplication implements CommandLineRunner{
 		//personalizedQueryBetween();
 		//personalizedQueryAggregation();
 		//subQuery();
-		whereIn();
+		//whereIn();
 	}
 
 	public void list(){
@@ -81,7 +82,7 @@ public class SpringbootJpaApplication implements CommandLineRunner{
 
 	@Transactional
 	public void create(){
-		Person person = new Person(null, "Haitian", "Ji", "Springboot");
+		Person person = new Person(null, "Pepe", "Popiu", "JavaScript");
 		//if(repository.findByNameAndLastname(person.getName(),person.getLastname()).isEmpty()){
 			repository.save(person);
 		//}

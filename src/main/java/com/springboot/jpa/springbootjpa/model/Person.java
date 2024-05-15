@@ -1,6 +1,10 @@
 package com.springboot.jpa.springbootjpa.model;
 
+
+import org.springframework.beans.factory.annotation.Autowired;
+
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,7 +23,9 @@ public class Person {
     @Column(name = "programming_language")
     private String programmingLanguages;
 
-    
+    @Embedded
+    private Audit audit=new Audit();
+
     public Person() {//JPA usa este constructor vacio, para crear una instancia de la clase cuando recupera los datos
     }
 
@@ -53,10 +59,12 @@ public class Person {
     public void setProgrammingLanguages(String programmingLanguages) {
         this.programmingLanguages = programmingLanguages;
     }
+
     @Override
     public String toString() {
-        return "[id=" + id + ", name=" + name + ", lastname=" + lastname + ", programmingLanguage="
-                + programmingLanguages + "]";
+        return "Person [id=" + id + ", name=" + name + ", lastname=" + lastname + ", programmingLanguages="
+                + programmingLanguages + ", createAt=" + audit.getCreateAt() + ", updateAt=" + audit.getUpdateAt() + "]";
     }
+   
     
 }
