@@ -36,6 +36,7 @@ public class SpringbootJpaApplication implements CommandLineRunner{
 		//personalizedQueryDistinctCount();
 		//personalizedQueryConcat();
 		personalizedQueryBetween();
+		personalizedQueryCountMaxMin();
 	}
 
 	public void list(){
@@ -183,6 +184,17 @@ public class SpringbootJpaApplication implements CommandLineRunner{
 	List<Person> personReg2 = repository.findByIdBetweenOrderByIdDesc(1L,100L);
 	personReg2.forEach(System.out::println);
 		
+	}
+
+	@Transactional(readOnly = true)
+	public void personalizedQueryCountMaxMin(){
+		System.out.println("=================================Consulta personalizada cpunt max and min===================================");
+		Long countPerson = repository.totalPerson();
+		Long maxId = repository.maxId();
+		Long minId = repository.minId();
+		System.out.println("Total de Person: "+countPerson+" ===================================");
+		System.out.println("maxId: "+maxId+" ===================================");
+		System.out.println("minId: "+minId+" ===================================");
 	}
 
 }

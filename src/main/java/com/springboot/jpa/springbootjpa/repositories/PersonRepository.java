@@ -70,4 +70,13 @@ public interface PersonRepository extends CrudRepository<Person,Long>{
     List<Person> findBetweenId(Long num1,Long num2);
 
     List<Person> findByIdBetweenOrderByIdDesc(Long n1,Long n2);//otra manera de hacer consulta
+
+    @Query("select count(p) from Person p")
+    Long totalPerson();
+
+    @Query("select max(p.id) from Person p")
+    Long maxId();
+
+    @Query("select min(p.id) from Person p")
+    Long minId();
 }
