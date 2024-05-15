@@ -32,8 +32,9 @@ public class SpringbootJpaApplication implements CommandLineRunner{
 		//list();
 		//findOneById();
 		//personalizedQuery2();
-		personalizedQueryDistinct();
-		personalizedQueryDistinctCount();
+		//personalizedQueryDistinct();
+		//personalizedQueryDistinctCount();
+		personalizedQueryConcat();
 	}
 
 	public void list(){
@@ -161,6 +162,14 @@ public class SpringbootJpaApplication implements CommandLineRunner{
 		Long LanguagesRegCount = repository.allProgrammingLanguagesDistinctCount();
 
 		System.out.println("Total de lenguages de programaciobn: "+LanguagesRegCount+" ===================================");
+	}
+
+	@Transactional(readOnly = true)
+	public void personalizedQueryConcat(){
+		System.out.println("=================================Consulta personalizada concat===================================");
+		List<String> personNameReg = repository.findFullName();
+		personNameReg.forEach(System.out::println);
+		
 	}
 
 }
