@@ -1,5 +1,6 @@
 package com.springboot.jpa.springbootjpa;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -37,7 +38,8 @@ public class SpringbootJpaApplication implements CommandLineRunner{
 		//personalizedQueryConcat();
 		//personalizedQueryBetween();
 		//personalizedQueryAggregation();
-		subQuery();
+		//subQuery();
+		whereIn();
 	}
 
 	public void list(){
@@ -210,6 +212,13 @@ public class SpringbootJpaApplication implements CommandLineRunner{
 		personName.forEach(p->{
 			System.out.println("Nombre mas corto es: "+p[0]+" tiene una largaria de "+p[1]);
 		});
+	}
+
+	@Transactional
+	public void whereIn(){
+		System.out.println("=================================Sub Query===================================");
+		List<Person> personName = repository.getPersonByIds(Arrays.asList(1L,4L,7L));
+		personName.forEach(System.out::println);
 	}
 
 }
