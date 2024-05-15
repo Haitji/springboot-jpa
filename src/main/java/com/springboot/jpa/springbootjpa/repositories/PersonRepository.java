@@ -62,4 +62,10 @@ public interface PersonRepository extends CrudRepository<Person,Long>{
 
     @Query("select p.name|| ' '||p.lastname from Person p")//esta es otra manera de concatenar
     List<String> findFullName2();
+
+    @Query("select upper(p.name)|| ' '||lower(p.lastname) from Person p")
+    List<String> findFullNameUpperLowerCase();
+
+    @Query("select p from Person p where p.id between ?1 and ?2")
+    List<Person> findBetweenId(Long num1,Long num2);
 }

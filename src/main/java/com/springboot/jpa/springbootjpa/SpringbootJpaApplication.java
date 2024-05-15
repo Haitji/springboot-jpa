@@ -34,7 +34,8 @@ public class SpringbootJpaApplication implements CommandLineRunner{
 		//personalizedQuery2();
 		//personalizedQueryDistinct();
 		//personalizedQueryDistinctCount();
-		personalizedQueryConcat();
+		//personalizedQueryConcat();
+		personalizedQueryBetween();
 	}
 
 	public void list(){
@@ -169,6 +170,14 @@ public class SpringbootJpaApplication implements CommandLineRunner{
 		System.out.println("=================================Consulta personalizada concat===================================");
 		List<String> personNameReg = repository.findFullName();
 		personNameReg.forEach(System.out::println);
+		
+	}
+
+	@Transactional(readOnly = true)
+	public void personalizedQueryBetween(){
+		System.out.println("=================================Consulta personalizada between ids===================================");
+	List<Person> personReg = repository.findBetweenId(1L,4L);
+	personReg.forEach(System.out::println);
 		
 	}
 
