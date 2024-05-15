@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import com.springboot.jpa.springbootjpa.model.Person;
+import com.springboot.jpa.springbootjpa.model.PersonDTO;
 import com.springboot.jpa.springbootjpa.repositories.PersonRepository;
 
 
@@ -26,10 +27,13 @@ public class SpringbootJpaApplication implements CommandLineRunner{
 
 	@Override
 	public void run(String... args) throws Exception {
-		// create();
+		//create();
 		// delete();
-		// list();
-		findOneById();
+		//list();
+		//findOneById();
+		//personalizedQuery2();
+		personalizedQueryDistinct();
+		personalizedQueryDistinctCount();
 	}
 
 	public void list(){
@@ -72,9 +76,9 @@ public class SpringbootJpaApplication implements CommandLineRunner{
 	@Transactional
 	public void create(){
 		Person person = new Person(null, "Haitian", "Ji", "Springboot");
-		if(repository.findByNameAndLastname(person.getName(),person.getLastname()).isEmpty()){
+		//if(repository.findByNameAndLastname(person.getName(),person.getLastname()).isEmpty()){
 			repository.save(person);
-		}
+		//}
 		
 		List<Person> per = (List<Person>) repository.findAll();
 		per.stream().forEach(p -> {
@@ -112,6 +116,51 @@ public class SpringbootJpaApplication implements CommandLineRunner{
 		// 	System.out.println("El id introducido no existe");
 		// }
 		optionalPerson.ifPresentOrElse(/*p -> repository.delete(p)*/repository::delete, () -> System.out.println("El id introducido no existe"));
+	}
+
+	@Transactional(readOnly = true)
+	public void personalizedQuery(){
+		System.out.println("=================================Consulta personalizada===================================");
+		List<Object[]> personReg = repository.findAllMixedPerson();
+
+		personReg.forEach(reg->{
+			System.out.println("Programming language -- "+reg[1]+ " \nPerson --"+reg[0]);
+		});
+	}
+
+	@Transactional(readOnly = true)
+	public void personalizedQuery2(){
+		System.out.println("=================================Consulta personalizada===================================");
+		List<PersonDTO> personReg = repository.findAllPerzonalizedPersonDTO();
+
+		personReg.forEach(reg->{
+			System.out.println(reg);
+		});
+	}
+
+	@Transactional(readOnly = true)
+	public void personalizedQueryDistinct(){
+		System.out.println("=================================Consulta personalizada name ditinct===================================");
+		List<String> personReg = repository.allNameDistinct();
+
+		personReg.forEach(reg->{
+			System.out.println(reg);
+		});
+
+		System.out.println("=================================Consulta personalizada languages ditinct===================================");
+		List<String> LanguagesReg = repository.allProgrammingLanguagesDistinct();
+
+		LanguagesReg.forEach(reg->{
+			System.out.println(reg);
+		});
+	}
+
+	@Transactional(readOnly = true)
+	public void personalizedQueryDistinctCount(){
+		System.out.println("=================================Consulta personalizada languages total ditinct===================================");
+		Long LanguagesRegCount = repository.allProgrammingLanguagesDistinctCount();
+
+		System.out.println("Total de lenguages de programaciobn: "+LanguagesRegCount+" ===================================");
 	}
 
 }

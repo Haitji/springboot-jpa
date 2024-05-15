@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import com.springboot.jpa.springbootjpa.model.Person;
+import com.springboot.jpa.springbootjpa.model.PersonDTO;
 
 
 public interface PersonRepository extends CrudRepository<Person,Long>{
@@ -37,4 +38,22 @@ public interface PersonRepository extends CrudRepository<Person,Long>{
 
     @Query("select p.id,p.name, p.lastname, p.programmingLanguages from Person p where p.id = ?1")
     Object buscarPersonaPorid(Long id);
+
+    @Query("select p, p.programmingLanguages from Person p")
+    List<Object[]> findAllMixedPerson();
+
+    @Query("select new Person(null,p.name,p.lastname,'') from Person p")
+    List<Person> findAllPerzonalizedPerson();
+
+    @Query("select new com.springboot.jpa.springbootjpa.model.PersonDTO(p.name,p.lastname) from Person p")//es necesario poner todo el package para que encuntre donde esta la clase, porque al no estar anotada con un @Entity no reconoce/encuentra esto
+    List<PersonDTO> findAllPerzonalizedPersonDTO();
+
+    @Query("select distinct(p.name) from Person p")
+    List<String> allNameDistinct();
+
+    @Query("select distinct(p.programmingLanguages) from Person p")
+    List<String> allProgrammingLanguagesDistinct();
+
+    @Query("select count(distinct(p.programmingLanguages)) from Person p")
+    Long allProgrammingLanguagesDistinctCount();
 }
