@@ -35,8 +35,9 @@ public class SpringbootJpaApplication implements CommandLineRunner{
 		//personalizedQueryDistinct();
 		//personalizedQueryDistinctCount();
 		//personalizedQueryConcat();
-		personalizedQueryBetween();
-		personalizedQueryAggregation();
+		//personalizedQueryBetween();
+		//personalizedQueryAggregation();
+		subQuery();
 	}
 
 	public void list(){
@@ -200,6 +201,15 @@ public class SpringbootJpaApplication implements CommandLineRunner{
 			System.out.println("Nombre: "+p[0]+" tiene una largaria de "+p[1]);
 		});
 
+	}
+
+	@Transactional
+	public void subQuery(){
+		System.out.println("=================================Sub Query===================================");
+		List<Object[]> personName = repository.getShorterNameLenght();
+		personName.forEach(p->{
+			System.out.println("Nombre mas corto es: "+p[0]+" tiene una largaria de "+p[1]);
+		});
 	}
 
 }
