@@ -79,4 +79,7 @@ public interface PersonRepository extends CrudRepository<Person,Long>{
 
     @Query("select min(p.id) from Person p")
     Long minId();
+
+    @Query("select p.name,LENGTH(p.name) from Person p")
+    List<Object[]> getNameLenght();
 }

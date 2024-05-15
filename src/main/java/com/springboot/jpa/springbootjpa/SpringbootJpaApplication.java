@@ -36,7 +36,7 @@ public class SpringbootJpaApplication implements CommandLineRunner{
 		//personalizedQueryDistinctCount();
 		//personalizedQueryConcat();
 		personalizedQueryBetween();
-		personalizedQueryCountMaxMin();
+		personalizedQueryAggregation();
 	}
 
 	public void list(){
@@ -182,19 +182,24 @@ public class SpringbootJpaApplication implements CommandLineRunner{
 
 	System.out.println("=================================Consulta personalizada between ids desc===================================");
 	List<Person> personReg2 = repository.findByIdBetweenOrderByIdDesc(1L,100L);
-	personReg2.forEach(System.out::println);
-		
+	personReg2.forEach(System.out::println);	
 	}
 
 	@Transactional(readOnly = true)
-	public void personalizedQueryCountMaxMin(){
-		System.out.println("=================================Consulta personalizada cpunt max and min===================================");
+	public void personalizedQueryAggregation(){
+		System.out.println("=================================Consulta personalizada Aggregation===================================");
 		Long countPerson = repository.totalPerson();
 		Long maxId = repository.maxId();
 		Long minId = repository.minId();
 		System.out.println("Total de Person: "+countPerson+" ===================================");
 		System.out.println("maxId: "+maxId+" ===================================");
 		System.out.println("minId: "+minId+" ===================================");
+
+		List<Object[]> personName = repository.getNameLenght();
+		personName.forEach(p->{
+			System.out.println("Nombre: "+p[0]+" tiene una largaria de "+p[1]);
+		});
+
 	}
 
 }
